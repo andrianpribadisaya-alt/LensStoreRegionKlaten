@@ -27,7 +27,7 @@
       box-shadow: 0 10px 30px rgba(0,0,0,.4);
     }
 
-    img {
+    img.avatar {
       width: 96px;
       height: 96px;
       border-radius: 50%;
@@ -57,8 +57,9 @@
       margin-bottom: 20px;
     }
 
-    a {
+    a, button {
       display: block;
+      width: 100%;
       text-decoration: none;
       color: #0f172a;
       background: #38bdf8;
@@ -66,9 +67,12 @@
       border-radius: 12px;
       margin-bottom: 12px;
       font-weight: bold;
+      border: none;
+      cursor: pointer;
+      font-size: 14px;
     }
 
-    a:hover {
+    a:hover, button:hover {
       background: #0ea5e9;
     }
 
@@ -77,29 +81,109 @@
       font-size: 12px;
       color: #94a3b8;
     }
+
+    /* POPUP QRIS */
+    .popup {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,.7);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      z-index: 999;
+    }
+
+    .popup-content {
+      background: #020617;
+      padding: 20px;
+      border-radius: 16px;
+      text-align: center;
+      width: 90%;
+      max-width: 320px;
+    }
+
+    .popup-content img {
+      width: 100%;
+      border-radius: 12px;
+    }
+
+    .close {
+      margin-top: 12px;
+      background: #ef4444;
+      color: white;
+    }
   </style>
+
+  <script>
+    const adminWA = "628xxxxxxxxxx"; // GANTI NOMOR ADMIN
+
+    function copyText(text) {
+      navigator.clipboard.writeText(text).then(() => {
+        alert("Nomor berhasil disalin:\n" + text);
+      });
+    }
+
+    function openQRIS() {
+      document.getElementById("qrisPopup").style.display = "flex";
+    }
+
+    function closeQRIS() {
+      document.getElementById("qrisPopup").style.display = "none";
+    }
+
+    function kirimBukti() {
+      const pesan =
+`Halo Admin Lens Store,
+Saya sudah melakukan pembayaran.
+
+Metode:
+Nama:
+Nominal:
+
+Bukti pembayaran terlampir.
+Terima kasih.`;
+
+      const url = "https://wa.me/" + adminWA + "?text=" + encodeURIComponent(pesan);
+      window.open(url, "_blank");
+    }
+  </script>
 </head>
 
 <body>
   <div class="card">
-    <img src="https://i.imgur.com/1X6zGQk.png" alt="Avatar" />
+    <img src="https://i.imgur.com/1X6zGQk.png" class="avatar" />
 
     <h1>Lens Store</h1>
     <span class="status">ONLINE 24 JAM</span>
     <p>Region Klaten</p>
 
     <!-- SOSIAL -->
-    <a href="https://wa.me/628xxxxxx" target="_blank">📱 WhatsApp</a>
+    <a href="https://wa.me/628xxxxxxxxxx" target="_blank">📱 WhatsApp</a>
     <a href="#" target="_blank">📸 Instagram</a>
     <a href="#" target="_blank">🎵 TikTok</a>
 
     <div class="divider">METODE PEMBAYARAN</div>
 
-    <!-- PAYMENT -->
-    <a href="#" target="_blank">💳 GoPay</a>
-    <a href="#" target="_blank">💰 DANA</a>
-    <a href="#" target="_blank">📷 QRIS</a>
-    <a href="#" target="_blank">🏦 SeaBank</a>
+    <!-- AUTO COPY -->
+    <button onclick="copyText('081234567890')">💰 DANA</button>
+    <button onclick="copyText('081234567890')">💳 GoPay</button>
+    <button onclick="copyText('901234567890')">🏦 SeaBank</button>
+
+    <!-- QRIS -->
+    <button onclick="openQRIS()">📷 QRIS (Scan)</button>
+
+    <div class="divider">KONFIRMASI PEMBAYARAN</div>
+
+    <!-- KIRIM BUKTI -->
+    <button onclick="kirimBukti()">📤 Kirim Bukti Bayar</button>
+  </div>
+
+  <!-- POPUP QRIS -->
+  <div class="popup" id="qrisPopup">
+    <div class="popup-content">
+      <img src="qris.png" alt="QRIS">
+      <button class="close" onclick="closeQRIS()">Tutup</button>
+    </div>
   </div>
 </body>
 </html>
