@@ -1,189 +1,210 @@
 <!DOCTYPE html>
 <html lang="id">
 <head>
-  <meta charset="UTF-8" />
-  <title>Lens Store | Biolink</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta charset="UTF-8">
+  <title>Lens Store | Biolink Premium</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <style>
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #fff;
+      background: linear-gradient(135deg, #0ea5e9, #6366f1);
+      min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
-      min-height: 100vh;
     }
 
     .card {
-      background: #020617;
+      background: #ffffff;
       padding: 24px;
-      border-radius: 16px;
+      border-radius: 20px;
       width: 100%;
       max-width: 360px;
       text-align: center;
-      box-shadow: 0 10px 30px rgba(0,0,0,.4);
+      box-shadow: 0 20px 40px rgba(0,0,0,.25);
     }
 
-    img.avatar {
+    img {
       width: 96px;
       height: 96px;
       border-radius: 50%;
-      object-fit: cover;
-      margin-bottom: 12px;
+      margin-bottom: 10px;
+      border: 3px solid #38bdf8;
     }
 
     h1 {
+      margin: 6px 0;
       font-size: 20px;
-      margin: 8px 0 4px;
+      color: #020617;
     }
 
     .status {
       display: inline-block;
       background: #22c55e;
-      color: #020617;
-      padding: 4px 10px;
+      color: #fff;
+      padding: 4px 12px;
       border-radius: 999px;
       font-size: 11px;
+      margin-bottom: 10px;
       font-weight: bold;
-      margin-bottom: 12px;
     }
 
     p {
       font-size: 13px;
-      color: #cbd5f5;
-      margin-bottom: 20px;
+      color: #475569;
+      margin-bottom: 18px;
     }
 
-    a, button {
-      display: block;
+    button {
       width: 100%;
-      text-decoration: none;
-      color: #0f172a;
-      background: #38bdf8;
-      padding: 12px;
-      border-radius: 12px;
+      padding: 13px;
       margin-bottom: 12px;
-      font-weight: bold;
+      border-radius: 14px;
       border: none;
-      cursor: pointer;
       font-size: 14px;
+      font-weight: bold;
+      cursor: pointer;
+      color: #fff;
+      background: linear-gradient(135deg, #38bdf8, #0ea5e9);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s cubic-bezier(.4,1.4,.6,1);
+      box-shadow: 0 8px 18px rgba(56,189,248,.35);
     }
 
-    a:hover, button:hover {
-      background: #0ea5e9;
+    button:active {
+      transform: scale(0.9);
     }
 
-    .divider {
-      margin: 16px 0 10px;
-      font-size: 12px;
-      color: #94a3b8;
+    .order {
+      background: linear-gradient(135deg, #22c55e, #16a34a);
+      box-shadow: 0 8px 18px rgba(34,197,94,.4);
     }
 
-    /* POPUP QRIS */
-    .popup {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,.7);
-      display: none;
-      align-items: center;
-      justify-content: center;
-      z-index: 999;
+    .bot {
+      background: linear-gradient(135deg, #f97316, #fb923c);
+      box-shadow: 0 8px 18px rgba(249,115,22,.45);
     }
 
-    .popup-content {
-      background: #020617;
-      padding: 20px;
-      border-radius: 16px;
-      text-align: center;
-      width: 90%;
-      max-width: 320px;
+    /* Ripple air */
+    .ripple {
+      position: absolute;
+      border-radius: 50%;
+      transform: scale(0);
+      animation: ripple 0.6s linear;
+      background-color: rgba(255,255,255,0.6);
     }
 
-    .popup-content img {
-      width: 100%;
-      border-radius: 12px;
-    }
-
-    .close {
-      margin-top: 12px;
-      background: #ef4444;
-      color: white;
+    @keyframes ripple {
+      to {
+        transform: scale(4);
+        opacity: 0;
+      }
     }
   </style>
 
   <script>
-    const adminWA = "628xxxxxxxxxx"; // GANTI NOMOR ADMIN
+    const WA_NUMBER = "6285923350578"; // 🔴 GANTI NOMOR WA KAMU
 
-    function copyText(text) {
-      navigator.clipboard.writeText(text).then(() => {
-        alert("Nomor berhasil disalin:\n" + text);
-      });
+    function rippleEffect(e) {
+      const button = e.currentTarget;
+      const circle = document.createElement("span");
+      const diameter = Math.max(button.clientWidth, button.clientHeight);
+      const radius = diameter / 2;
+
+      circle.style.width = circle.style.height = `${diameter}px`;
+      circle.style.left = `${e.clientX - button.offsetLeft - radius}px`;
+      circle.style.top = `${e.clientY - button.offsetTop - radius}px`;
+      circle.classList.add("ripple");
+
+      const ripple = button.getElementsByClassName("ripple")[0];
+      if (ripple) ripple.remove();
+
+      button.appendChild(circle);
+      if (navigator.vibrate) navigator.vibrate(20);
     }
 
-    function openQRIS() {
-      document.getElementById("qrisPopup").style.display = "flex";
-    }
-
-    function closeQRIS() {
-      document.getElementById("qrisPopup").style.display = "none";
-    }
-
-    function kirimBukti() {
-      const pesan =
-`Halo Admin Lens Store,
-Saya sudah melakukan pembayaran.
-
-Metode:
-Nama:
-Nominal:
-
-Bukti pembayaran terlampir.
-Terima kasih.`;
-
-      const url = "https://wa.me/" + adminWA + "?text=" + encodeURIComponent(pesan);
+    function sendWA(text) {
+      const url = "https://wa.me/6285923350578" + WA_NUMBER + "?text=" + encodeURIComponent(text);
       window.open(url, "_blank");
+    }
+
+    function orderNow() {
+      sendWA(
+        "Halo Lens Store 👋\n\n" +
+        "Saya ingin *ORDER TOP UP*.\n\n" +
+        "Produk :\n" +
+        "ID / No Tujuan :\n" +
+        "Jumlah :\n" +
+        "Metode Pembayaran :\n\n" +
+        "Terima kasih 🙏"
+      );
+    }
+
+    function openBot(type) {
+      if (type === "fun") {
+        sendWA("Halo 👋\nSaya ingin membuat *WhatsApp Fun Bot*.\nMohon info fitur & harga ya.");
+      } else if (type === "topup") {
+        sendWA("Halo 👋\nSaya ingin membuat *WhatsApp Bot Top Up*.\nMohon info sistem & harga.");
+      } else if (type === "biolink") {
+        sendWA("Halo 👋\nSaya ingin membuat *Biolink Premium*.\nMohon info paket & demo.");
+      }
+    }
+
+    function openService() {
+      sendWA(
+        "Halo 👋\nSaya ingin *Custom Service / Custom Bot WhatsApp*.\n\n" +
+        "Kebutuhan :\n" +
+        "Fitur :\n" +
+        "Untuk bisnis / pribadi :\n\n" +
+        "Mohon info ya 🙏"
+      );
+    }
+
+    function openPanel() {
+      sendWA(
+        "Halo 👋\nSaya ingin *Membeli Panel*.\n\n" +
+        "panel 1gb-unlimited:\n" +
+        "Durasi :\n" +
+        "Jumlah Slot :\n\n" +
+        "Mohon info harga 🙏"
+      );
     }
   </script>
 </head>
 
 <body>
   <div class="card">
-    <img src="https://i.imgur.com/1X6zGQk.png" class="avatar" />
-
+    <img src="https://i.imgur.com/1X6zGQk.png">
     <h1>Lens Store</h1>
     <span class="status">ONLINE 24 JAM</span>
-    <p>Region Klaten</p>
+    <p>Top Up • Bot WhatsApp • Biolink Premium</p>
 
-    <!-- SOSIAL -->
-    <a href="https://wa.me/628xxxxxxxxxx" target="_blank">📱 WhatsApp</a>
-    <a href="#" target="_blank">📸 Instagram</a>
-    <a href="#" target="_blank">🎵 TikTok</a>
+    <button class="order" onclick="rippleEffect(event); orderNow()">
+      🛒 ORDER TOP UP
+    </button>
 
-    <div class="divider">METODE PEMBAYARAN</div>
+    <button class="bot" onclick="rippleEffect(event); openBot('fun')">
+      🤖 Open Fun Bot
+    </button>
 
-    <!-- AUTO COPY -->
-    <button onclick="copyText('081234567890')">💰 DANA</button>
-    <button onclick="copyText('081234567890')">💳 GoPay</button>
-    <button onclick="copyText('901234567890')">🏦 SeaBank</button>
+    <button class="bot" onclick="rippleEffect(event); openBot('topup')">
+      💰 Open Bot Top Up
+    </button>
 
-    <!-- QRIS -->
-    <button onclick="openQRIS()">📷 QRIS (Scan)</button>
+    <button class="bot" onclick="rippleEffect(event); openBot('biolink')">
+      🔗 Open Biolink Premium
+    </button>
 
-    <div class="divider">KONFIRMASI PEMBAYARAN</div>
+    <button class="bot" onclick="rippleEffect(event); openService()">
+      🛠️ Open Service / Custom Bot
+    </button>
 
-    <!-- KIRIM BUKTI -->
-    <button onclick="kirimBukti()">📤 Kirim Bukti Bayar</button>
-  </div>
-
-  <!-- POPUP QRIS -->
-  <div class="popup" id="qrisPopup">
-    <div class="popup-content">
-      <img src="qris.png" alt="QRIS">
-      <button class="close" onclick="closeQRIS()">Tutup</button>
-    </div>
+    <button class="bot" onclick="rippleEffect(event); openPanel()">
+      🧩 Penjualan Panel
+    </button>
   </div>
 </body>
 </html>
