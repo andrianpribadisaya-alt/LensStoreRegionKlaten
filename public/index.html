@@ -3,132 +3,155 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Premium Link Page</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <title>XDOO-HOSTING Premium</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
     <style>
-        /* 1. RESET & BASE STYLE */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            background: radial-gradient(circle at top, #1e293b 0%, #0f172a 100%);
-            color: white;
-            font-family: 'Inter', sans-serif;
-            display: flex;
-            justify-content: center;
-            min-height: 100vh;
-            padding: 50px 20px;
-        }
-
-        .container {
+        /* --- CSS LOADING SCREEN --- */
+        #loader {
+            position: fixed;
             width: 100%;
-            max-width: 400px;
-            text-align: center;
-            /* Animasi muncul saat halaman dibuka */
-            animation: fadeInUp 1s ease-out;
-        }
-
-        /* 2. PROFIL */
-        .profile-img {
-            width: 110px;
-            height: 110px;
-            border-radius: 50%;
-            border: 3px solid #38bdf8;
-            margin-bottom: 20px;
-            box-shadow: 0 0 20px rgba(56, 189, 248, 0.3);
-            object-fit: cover;
-        }
-
-        h1 { font-size: 1.8rem; margin-bottom: 10px; letter-spacing: -0.5px; }
-        p { color: #94a3b8; margin-bottom: 35px; font-size: 0.95rem; }
-
-        /* 3. TOMBOL LINK GLOW */
-        .links-gap {
+            height: 100vh;
+            background: black;
             display: flex;
             flex-direction: column;
-            gap: 15px;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
         }
-
-        .btn-link {
-            position: relative;
-            background: rgba(255, 255, 255, 0.05);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 18px;
-            border-radius: 15px;
-            text-decoration: none;
+        .circle-load {
+            width: 80px;
+            height: 80px;
+            border: 4px solid #333;
+            border-top: 4px solid #ff0000;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+        .percent {
             color: white;
-            font-weight: 600;
-            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            backdrop-filter: blur(10px);
-            overflow: hidden;
+            margin-top: 15px;
+            font-family: 'Courier New', monospace;
+            font-size: 20px;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+
+        /* --- CSS UTAMA (CYBERPUNK STYLE) --- */
+        body {
+            background: #000 url('https://w0.peakpx.com/wallpaper/423/344/HD-wallpaper-code-dark-digital-black.jpg');
+            background-blend-mode: overlay;
+            color: white;
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            overflow-x: hidden;
+        }
+        .main-content { display: none; padding: 20px; text-align: center; }
+
+        .header-box {
+            border: 2px solid #ff0000;
+            padding: 10px;
+            margin-bottom: 30px;
+            display: inline-block;
+            border-radius: 5px;
+            box-shadow: 0 0 10px #ff0000;
         }
 
-        /* Efek Glow saat Hover */
-        .btn-link:hover {
-            background: rgba(56, 189, 248, 0.1);
-            border-color: #38bdf8;
-            box-shadow: 0 0 15px rgba(56, 189, 248, 0.4);
-            transform: scale(1.03);
+        .btn-neon {
+            background: rgba(255, 0, 0, 0.1);
+            border: 1px solid #ff0000;
+            color: white;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            text-decoration: none;
+            transition: 0.3s;
+            box-shadow: inset 0 0 10px rgba(255, 0, 0, 0.2);
         }
+        .btn-neon:hover { background: #ff0000; box-shadow: 0 0 20px #ff0000; }
 
-        /* Animasi Garis Berkilau (Shine) */
-        .btn-link::after {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(255,255,255,0.1), transparent);
-            transform: rotate(45deg);
-            transition: 0.5s;
+        /* Card Produk (Horizontal Scroll) */
+        .product-scroll {
+            display: flex;
+            overflow-x: auto;
+            gap: 20px;
+            padding: 20px 0;
+            scrollbar-width: none;
         }
-
-        .btn-link:hover::after {
-            left: 100%;
+        .card {
+            min-width: 250px;
+            background: #111;
+            border-radius: 15px;
+            padding: 15px;
+            border: 1px solid #333;
         }
-
-        /* 4. ANIMASI KEYFRAMES */
-        @keyframes fadeInUp {
-            from {
-                opacity: 0;
-                transform: translateY(30px);
-            }
-            to {
-                opacity: 1;
-                transform: translateY(0);
-            }
-        }
-
-        .footer {
-            margin-top: 60px;
-            font-size: 0.8rem;
-            color: #64748b;
+        .card img { width: 100%; border-radius: 10px; }
+        .buy-btn {
+            background: white;
+            color: black;
+            padding: 8px;
+            display: block;
+            margin-top: 10px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
         }
     </style>
 </head>
 <body>
 
-    <div class="container">
-        <img src="https://ui-avatars.com/api/?name=Admin+Xdoo&background=38bdf8&color=fff" alt="Profile" class="profile-img">
-        
-        <h1>XDOO Premium</h1>
-        <p>Your Trusted High Performance Hosting</p>
-
-        <div class="links-gap">
-            <a href="https://wa.me/628xxx" target="_blank" class="btn-link">WhatsApp Support</a>
-            <a href="#" target="_blank" class="btn-link">Order Hosting (Best Seller)</a>
-            <a href="#" target="_blank" class="btn-link">Join Reseller Program</a>
-            <a href="#" target="_blank" class="btn-link">Testimonial Pelanggan</a>
-        </div>
-
-        <div class="footer">
-            Built with ❤️ using Vercel & HTML5
-        </div>
+    <div id="loader">
+        <div class="circle-load"></div>
+        <div class="percent" id="percentText">0%</div>
     </div>
 
+    <div class="main-content" id="mainContent">
+        <div class="header-box">
+            <h2 style="margin:0; letter-spacing: 3px;">XDOO-HOSTING</h2>
+        </div>
+
+        <div class="links">
+            <a href="#" class="btn-neon"><i class="fas fa-server"></i> Order Panel Hosting</a>
+            <a href="#" class="btn-neon"><i class="fas fa-shopping-cart"></i> Sewa Bot WhatsApp</a>
+            <a href="#" class="btn-neon" style="background: #ff0000;"><i class="fas fa-code"></i> Script Bot Premium</a>
+        </div>
+
+        <h3 style="margin-top: 40px;">« Geser Produk »</h3>
+        <div class="product-scroll">
+            <div class="card">
+                <img src="https://via.placeholder.com/200x120/ff0000/ffffff?text=XDOO-MD+V8" alt="prod">
+                <h4>XDOO-MD V8</h4>
+                <p style="font-size: 12px; color: #aaa;">Script bot WhatsApp fitur lengkap.</p>
+                <a href="#" class="buy-btn"><i class="fas fa-shopping-bag"></i> BUY SCRIPT</a>
+            </div>
+            <div class="card">
+                <img src="https://via.placeholder.com/200x120/007bff/ffffff?text=XDOO+X+HASH" alt="prod">
+                <h4>XDOO X HASH</h4>
+                <p style="font-size: 12px; color: #aaa;">Kecepatan tinggi & fitur AI.</p>
+                <a href="#" class="buy-btn"><i class="fas fa-shopping-bag"></i> BUY SCRIPT</a>
+            </div>
+        </div>
+
+        <p style="margin-top: 50px; font-size: 10px; color: #444;">© 2026 XDOO-HOSTING • TERBAIK & TERPERCAYA</p>
+    </div>
+
+    <script>
+        // LOGIKA LOADING PERSEN
+        let count = 0;
+        let loaderText = document.getElementById("percentText");
+        let loaderScreen = document.getElementById("loader");
+        let mainContent = document.getElementById("mainContent");
+
+        let interval = setInterval(() => {
+            count++;
+            loaderText.innerText = count + "%";
+            if (count === 100) {
+                clearInterval(interval);
+                loaderScreen.style.display = "none";
+                mainContent.style.display = "block";
+            }
+        }, 30); // Kecepatan loading (30ms per 1%)
+    </script>
 </body>
 </html>
