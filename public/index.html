@@ -2,240 +2,167 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Lens Store — Premium Service</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+<title>Script Free</title>
 
 <style>
-*{box-sizing:border-box}
-
-body{
-  margin:0;
-  font-family:'Inter',sans-serif;
-  background:
-    radial-gradient(800px at top,#1e40af20,transparent 60%),
-    linear-gradient(180deg,#020617,#020617);
-  min-height:100vh;
-  display:flex;
-  justify-content:center;
-  align-items:center;
-  color:#e5e7eb;
+:root {
+  --bg: #0b0b0b;
+  --card: #141414;
+  --border: #1f1f1f;
+  --text: #ffffff;
+  --muted: #9ca3af;
+  --accent: #2563eb;
 }
 
-/* MAIN CARD */
-.card{
-  width:100%;
-  max-width:400px;
-  padding:26px;
-  border-radius:22px;
-  background:rgba(15,23,42,.72);
-  backdrop-filter:blur(16px);
-  border:1px solid rgba(56,189,248,.25);
-  box-shadow:
-    0 0 0 1px rgba(56,189,248,.15),
-    0 30px 80px rgba(0,0,0,.8);
-  position:relative;
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
 
-/* TOP */
-.header{
-  text-align:center;
+body {
+  background: var(--bg);
+  color: var(--text);
+  display: flex;
+  justify-content: center;
 }
 
-.logo{
-  width:88px;
-  height:88px;
-  border-radius:50%;
-  border:3px solid #38bdf8;
-  margin-bottom:10px;
+.wrapper {
+  width: 100%;
+  max-width: 520px;
+  padding: 24px 16px 40px;
 }
 
-h1{
-  margin:4px 0;
-  font-size:22px;
-  font-weight:700;
+/* HEADER */
+.header {
+  text-align: center;
+  margin-bottom: 28px;
 }
 
-.subtitle{
-  font-size:13px;
-  color:#94a3b8;
-  margin-bottom:18px;
+.header h1 {
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
 }
 
-/* STATUS */
-.status{
-  display:inline-flex;
-  align-items:center;
-  gap:6px;
-  padding:6px 14px;
-  border-radius:999px;
-  font-size:11px;
-  font-weight:600;
-  background:rgba(34,197,94,.15);
-  color:#4ade80;
-  margin-bottom:16px;
+.header p {
+  margin-top: 6px;
+  font-size: 14px;
+  color: var(--muted);
 }
 
-.dot{
-  width:8px;
-  height:8px;
-  background:#4ade80;
-  border-radius:50%;
-  box-shadow:0 0 12px #4ade80;
-  animation:pulse 1.4s infinite;
+/* CARD LIST */
+.list {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
 }
 
-@keyframes pulse{
-  0%{opacity:.4}
-  50%{opacity:1}
-  100%{opacity:.4}
+.item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: all .15s ease;
 }
 
-/* BUTTONS */
-.btn{
-  width:100%;
-  padding:15px 16px;
-  border-radius:16px;
-  border:none;
-  margin-bottom:14px;
-  cursor:pointer;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  font-size:14px;
-  font-weight:600;
-  color:#fff;
-  background:rgba(255,255,255,.04);
-  border:1px solid rgba(148,163,184,.2);
-  transition:.18s ease;
-  position:relative;
-  overflow:hidden;
+.item:hover {
+  background: #181818;
+  transform: translateY(-1px);
 }
 
-.btn:hover{
-  transform:translateY(-1px);
-  box-shadow:0 0 25px rgba(56,189,248,.35);
-  border-color:#38bdf8;
+/* LEFT */
+.item-info h3 {
+  font-size: 15px;
+  font-weight: 600;
 }
 
-.btn:active{
-  transform:scale(.96);
+.item-info span {
+  display: block;
+  margin-top: 4px;
+  font-size: 12px;
+  color: var(--muted);
 }
 
-.btn span{
-  display:flex;
-  align-items:center;
-  gap:10px;
+/* BUTTON */
+.item a {
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  color: white;
+  background: var(--accent);
+  padding: 7px 14px;
+  border-radius: 8px;
+  white-space: nowrap;
 }
 
-.arrow{
-  opacity:.6;
-  transition:.15s;
+.item a:hover {
+  background: #1d4ed8;
 }
 
-.btn:hover .arrow{
-  opacity:1;
-  transform:translateX(4px);
-}
-
-/* VARIANT */
-.primary{
-  background:linear-gradient(135deg,#22c55e,#16a34a);
-  border:none;
-}
-
-.blue{
-  background:linear-gradient(135deg,#0ea5e9,#2563eb);
-  border:none;
-}
-
-.orange{
-  background:linear-gradient(135deg,#f97316,#fb923c);
-  border:none;
-}
-
-/* MODAL */
-.modal{
-  display:none;
-  position:fixed;
-  inset:0;
-  background:rgba(0,0,0,.75);
-  justify-content:center;
-  align-items:center;
-  z-index:999;
-}
-
-.modal-box{
-  background:#020617;
-  padding:20px;
-  border-radius:20px;
-  width:90%;
-  max-width:320px;
-  border:1px solid rgba(56,189,248,.25);
-  text-align:center;
-}
-
-.modal-box img{
-  width:100%;
-  border-radius:14px;
+/* FOOTER */
+.footer {
+  text-align: center;
+  margin-top: 36px;
+  font-size: 12px;
+  color: #6b7280;
 }
 </style>
-
-<script>
-const WA="6285923350578"
-
-const wa=t=>window.open(`https://wa.me/${WA}?text=${encodeURIComponent(t)}`)
-
-</script>
 </head>
 
 <body>
+  <div class="wrapper">
 
-<div class="card">
-  <div class="header">
-    <img class="logo" src="https://i.imgur.com/1X6zGQk.png">
-    <h1>Lens Store</h1>
-    <div class="status"><div class="dot"></div> ONLINE 24 JAM</div>
-    <div class="subtitle">Top Up • Bot WhatsApp • Biolink Premium</div>
+    <div class="header">
+      <h1>Script Free</h1>
+      <p>Kumpulan script gratis siap pakai</p>
+    </div>
+
+    <div class="list">
+
+      <div class="item">
+        <div class="item-info">
+          <h3>WhatsApp Bot MD</h3>
+          <span>Script bot multi device</span>
+        </div>
+        <a href="#">Open</a>
+      </div>
+
+      <div class="item">
+        <div class="item-info">
+          <h3>Unlock Website</h3>
+          <span>Bypass & unlock script</span>
+        </div>
+        <a href="#">Open</a>
+      </div>
+
+      <div class="item">
+        <div class="item-info">
+          <h3>HTML Web Template</h3>
+          <span>Dark mode responsive</span>
+        </div>
+        <a href="#">View</a>
+      </div>
+
+      <div class="item">
+        <div class="item-info">
+          <h3>Developer Tools</h3>
+          <span>Helper tools coding</span>
+        </div>
+        <a href="#">Go</a>
+      </div>
+
+    </div>
+
+    <div class="footer">
+      © 2026 Script Free
+    </div>
+
   </div>
-
-  <button class="btn primary" onclick="wa('Halo saya ingin ORDER TOP UP')">
-    <span>🛒 ORDER TOP UP</span><span class="arrow">➜</span>
-  </button>
-
-  <button class="btn orange" onclick="document.getElementById('qris').style.display='flex'">
-    <span>💳 BAYAR VIA QRIS</span><span class="arrow">➜</span>
-  </button>
-
-  <button class="btn blue" onclick="wa('Saya ingin WhatsApp Fun Bot')">
-    <span>🤖 Fun Bot</span><span class="arrow">➜</span>
-  </button>
-
-  <button class="btn blue" onclick="wa('Saya ingin Bot Top Up')">
-    <span>💰 Bot Top Up</span><span class="arrow">➜</span>
-  </button>
-
-  <button class="btn blue" onclick="wa('Saya ingin Biolink Premium')">
-    <span>🔗 Biolink Premium</span><span class="arrow">➜</span>
-  </button>
-
-  <button class="btn" onclick="wa('Custom Service')">
-    <span>🛠️ Custom Service</span><span class="arrow">➜</span>
-  </button>
-
-  <button class="btn" onclick="wa('Mau beli panel')">
-    <span>🧩 Panel</span><span class="arrow">➜</span>
-  </button>
-</div>
-
-<div class="modal" id="qris" onclick="this.style.display='none'">
-  <div class="modal-box" onclick="event.stopPropagation()">
-    <h3>Scan QRIS</h3>
-    <p>Semua E-Wallet</p>
-    <img src="qris.png">
-  </div>
-</div>
-
 </body>
 </html>
