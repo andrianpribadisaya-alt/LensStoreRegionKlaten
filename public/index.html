@@ -2,222 +2,238 @@
 <html lang="id">
 <head>
 <meta charset="UTF-8">
-<title>Lens Store | Biolink Premium</title>
+<title>Lens Store — Premium Service</title>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+
 <style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: linear-gradient(135deg, #0ea5e9, #6366f1);
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+*{box-sizing:border-box}
+
+body{
+  margin:0;
+  font-family:'Inter',sans-serif;
+  background:
+    radial-gradient(800px at top,#1e40af20,transparent 60%),
+    linear-gradient(180deg,#020617,#020617);
+  min-height:100vh;
+  display:flex;
+  justify-content:center;
+  align-items:center;
+  color:#e5e7eb;
 }
 
-.card {
-  background: #fff;
-  padding: 24px;
-  border-radius: 20px;
-  width: 100%;
-  max-width: 360px;
-  text-align: center;
-  box-shadow: 0 20px 40px rgba(0,0,0,.25);
+/* MAIN CARD */
+.card{
+  width:100%;
+  max-width:400px;
+  padding:26px;
+  border-radius:22px;
+  background:rgba(15,23,42,.72);
+  backdrop-filter:blur(16px);
+  border:1px solid rgba(56,189,248,.25);
+  box-shadow:
+    0 0 0 1px rgba(56,189,248,.15),
+    0 30px 80px rgba(0,0,0,.8);
+  position:relative;
 }
 
-img.logo {
-  width: 96px;
-  height: 96px;
-  border-radius: 50%;
-  margin-bottom: 10px;
-  border: 3px solid #38bdf8;
+/* TOP */
+.header{
+  text-align:center;
 }
 
-h1 {
-  margin: 6px 0;
-  font-size: 20px;
-  color: #020617;
+.logo{
+  width:88px;
+  height:88px;
+  border-radius:50%;
+  border:3px solid #38bdf8;
+  margin-bottom:10px;
 }
 
-.status {
-  display: inline-block;
-  background: #22c55e;
-  color: #fff;
-  padding: 4px 12px;
-  border-radius: 999px;
-  font-size: 11px;
-  margin-bottom: 10px;
-  font-weight: bold;
+h1{
+  margin:4px 0;
+  font-size:22px;
+  font-weight:700;
 }
 
-p {
-  font-size: 13px;
-  color: #475569;
-  margin-bottom: 18px;
+.subtitle{
+  font-size:13px;
+  color:#94a3b8;
+  margin-bottom:18px;
 }
 
-button {
-  width: 100%;
-  padding: 13px;
-  margin-bottom: 12px;
-  border-radius: 14px;
-  border: none;
-  font-size: 14px;
-  font-weight: bold;
-  cursor: pointer;
-  color: #fff;
-  position: relative;
-  overflow: hidden;
-  transition: transform .15s cubic-bezier(.4,1.4,.6,1);
+/* STATUS */
+.status{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  padding:6px 14px;
+  border-radius:999px;
+  font-size:11px;
+  font-weight:600;
+  background:rgba(34,197,94,.15);
+  color:#4ade80;
+  margin-bottom:16px;
 }
 
-button:active { transform: scale(.92); }
-
-.order {
-  background: linear-gradient(135deg, #22c55e, #16a34a);
+.dot{
+  width:8px;
+  height:8px;
+  background:#4ade80;
+  border-radius:50%;
+  box-shadow:0 0 12px #4ade80;
+  animation:pulse 1.4s infinite;
 }
 
-.bot {
-  background: linear-gradient(135deg, #f97316, #fb923c);
+@keyframes pulse{
+  0%{opacity:.4}
+  50%{opacity:1}
+  100%{opacity:.4}
 }
 
-.qris-btn {
-  background: linear-gradient(135deg, #0ea5e9, #2563eb);
+/* BUTTONS */
+.btn{
+  width:100%;
+  padding:15px 16px;
+  border-radius:16px;
+  border:none;
+  margin-bottom:14px;
+  cursor:pointer;
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  font-size:14px;
+  font-weight:600;
+  color:#fff;
+  background:rgba(255,255,255,.04);
+  border:1px solid rgba(148,163,184,.2);
+  transition:.18s ease;
+  position:relative;
+  overflow:hidden;
 }
 
-/* Ripple */
-.ripple {
-  position: absolute;
-  border-radius: 50%;
-  transform: scale(0);
-  animation: ripple .6s linear;
-  background: rgba(255,255,255,.6);
+.btn:hover{
+  transform:translateY(-1px);
+  box-shadow:0 0 25px rgba(56,189,248,.35);
+  border-color:#38bdf8;
 }
 
-@keyframes ripple {
-  to { transform: scale(4); opacity: 0; }
+.btn:active{
+  transform:scale(.96);
 }
 
-/* QRIS MODAL */
-.qris-modal {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0,0,0,.6);
-  justify-content: center;
-  align-items: center;
-  z-index: 999;
+.btn span{
+  display:flex;
+  align-items:center;
+  gap:10px;
 }
 
-.qris-box {
-  background: #fff;
-  padding: 20px;
-  border-radius: 18px;
-  max-width: 320px;
-  width: 90%;
-  text-align: center;
+.arrow{
+  opacity:.6;
+  transition:.15s;
 }
 
-.qris-box img {
-  width: 100%;
-  border-radius: 12px;
+.btn:hover .arrow{
+  opacity:1;
+  transform:translateX(4px);
 }
 
-.qris-box h3 {
-  margin: 10px 0 6px;
-  color: #020617;
+/* VARIANT */
+.primary{
+  background:linear-gradient(135deg,#22c55e,#16a34a);
+  border:none;
 }
 
-.qris-box p {
-  font-size: 13px;
-  color: #475569;
+.blue{
+  background:linear-gradient(135deg,#0ea5e9,#2563eb);
+  border:none;
+}
+
+.orange{
+  background:linear-gradient(135deg,#f97316,#fb923c);
+  border:none;
+}
+
+/* MODAL */
+.modal{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.75);
+  justify-content:center;
+  align-items:center;
+  z-index:999;
+}
+
+.modal-box{
+  background:#020617;
+  padding:20px;
+  border-radius:20px;
+  width:90%;
+  max-width:320px;
+  border:1px solid rgba(56,189,248,.25);
+  text-align:center;
+}
+
+.modal-box img{
+  width:100%;
+  border-radius:14px;
 }
 </style>
 
 <script>
-const WA_NUMBER = "6285923350578"; // GANTI NOMOR WA
+const WA="6285923350578"
 
-function rippleEffect(e) {
-  const btn = e.currentTarget;
-  const span = document.createElement("span");
-  const d = Math.max(btn.clientWidth, btn.clientHeight);
-  const r = d / 2;
+const wa=t=>window.open(`https://wa.me/${WA}?text=${encodeURIComponent(t)}`)
 
-  span.style.width = span.style.height = d + "px";
-  span.style.left = e.clientX - btn.getBoundingClientRect().left - r + "px";
-  span.style.top = e.clientY - btn.getBoundingClientRect().top - r + "px";
-  span.classList.add("ripple");
-
-  const old = btn.querySelector(".ripple");
-  if (old) old.remove();
-  btn.appendChild(span);
-}
-
-function sendWA(text) {
-  window.open(
-    `https://wa.me/${WA_NUMBER}?text=${encodeURIComponent(text)}`,
-    "_blank"
-  );
-}
-
-function orderNow() {
-  sendWA(
-    "Halo Lens Store 👋\n\nSaya ingin *ORDER TOP UP*.\n\nProduk:\nID / No:\nJumlah:\nPembayaran:\n\nTerima kasih 🙏"
-  );
-}
-
-function openBot(type) {
-  const msg = {
-    fun: "Halo 👋\nSaya ingin membuat *WhatsApp Fun Bot*.",
-    topup: "Halo 👋\nSaya ingin membuat *WhatsApp Bot Top Up*.",
-    biolink: "Halo 👋\nSaya ingin membuat *Biolink Premium*."
-  };
-  sendWA(msg[type]);
-}
-
-function openService() {
-  sendWA("Halo 👋\nSaya ingin *Custom Service / Bot WhatsApp*.");
-}
-
-function openPanel() {
-  sendWA("Halo 👋\nSaya ingin *Membeli Panel*.");
-}
-
-function openQRIS() {
-  document.getElementById("qrisModal").style.display = "flex";
-}
-
-function closeQRIS() {
-  document.getElementById("qrisModal").style.display = "none";
-}
 </script>
 </head>
 
 <body>
 
 <div class="card">
-  <img src="https://i.imgur.com/1X6zGQk.png" class="logo">
-  <h1>Lens Store</h1>
-  <span class="status">ONLINE 24 JAM</span>
-  <p>Top Up • Bot WhatsApp • Biolink Premium</p>
+  <div class="header">
+    <img class="logo" src="https://i.imgur.com/1X6zGQk.png">
+    <h1>Lens Store</h1>
+    <div class="status"><div class="dot"></div> ONLINE 24 JAM</div>
+    <div class="subtitle">Top Up • Bot WhatsApp • Biolink Premium</div>
+  </div>
 
-  <button class="order" onclick="rippleEffect(event);orderNow()">🛒 ORDER TOP UP</button>
-  <button class="qris-btn" onclick="rippleEffect(event);openQRIS()">💳 BAYAR VIA QRIS</button>
-  <button class="bot" onclick="rippleEffect(event);openBot('fun')">🤖 Fun Bot</button>
-  <button class="bot" onclick="rippleEffect(event);openBot('topup')">💰 Bot Top Up</button>
-  <button class="bot" onclick="rippleEffect(event);openBot('biolink')">🔗 Biolink Premium</button>
-  <button class="bot" onclick="rippleEffect(event);openService()">🛠️ Custom Service</button>
-  <button class="bot" onclick="rippleEffect(event);openPanel()">🧩 Panel</button>
+  <button class="btn primary" onclick="wa('Halo saya ingin ORDER TOP UP')">
+    <span>🛒 ORDER TOP UP</span><span class="arrow">➜</span>
+  </button>
+
+  <button class="btn orange" onclick="document.getElementById('qris').style.display='flex'">
+    <span>💳 BAYAR VIA QRIS</span><span class="arrow">➜</span>
+  </button>
+
+  <button class="btn blue" onclick="wa('Saya ingin WhatsApp Fun Bot')">
+    <span>🤖 Fun Bot</span><span class="arrow">➜</span>
+  </button>
+
+  <button class="btn blue" onclick="wa('Saya ingin Bot Top Up')">
+    <span>💰 Bot Top Up</span><span class="arrow">➜</span>
+  </button>
+
+  <button class="btn blue" onclick="wa('Saya ingin Biolink Premium')">
+    <span>🔗 Biolink Premium</span><span class="arrow">➜</span>
+  </button>
+
+  <button class="btn" onclick="wa('Custom Service')">
+    <span>🛠️ Custom Service</span><span class="arrow">➜</span>
+  </button>
+
+  <button class="btn" onclick="wa('Mau beli panel')">
+    <span>🧩 Panel</span><span class="arrow">➜</span>
+  </button>
 </div>
 
-<!-- QRIS MODAL -->
-<div class="qris-modal" id="qrisModal" onclick="closeQRIS()">
-  <div class="qris-box" onclick="event.stopPropagation()">
+<div class="modal" id="qris" onclick="this.style.display='none'">
+  <div class="modal-box" onclick="event.stopPropagation()">
     <h3>Scan QRIS</h3>
-    <p>Semua e-wallet & m-banking</p>
-    <img src="qris.png" alt="QRIS">
-    <button class="order" onclick="closeQRIS()">TUTUP</button>
+    <p>Semua E-Wallet</p>
+    <img src="qris.png">
   </div>
 </div>
 
