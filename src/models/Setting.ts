@@ -20,6 +20,43 @@ const SettingSchema = new Schema(
         default: 2,
       },
     },
+
+    payment: {
+      provider: {
+        type: String,
+        default: "tokopay",
+      },
+
+      merchantId: {
+        type: String,
+        default: "",
+      },
+
+      secretKey: {
+        type: String,
+        default: "",
+      },
+
+      apiKey: {
+        type: String,
+        default: "",
+      },
+
+      expired: {
+        type: Number,
+        default: 60,
+      },
+
+      uniqueCode: {
+        type: Number,
+        default: 0,
+      },
+
+      active: {
+        type: Boolean,
+        default: true,
+      },
+    },
   },
   {
     timestamps: true,
