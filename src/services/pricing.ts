@@ -6,11 +6,12 @@ export async function calculatePrice(
 ) {
   const setting = await Setting.findOne();
 
-  if (!setting) {
-    throw new Error("Setting belum dibuat");
-  }
+  if (!setting) return providerPrice;
 
-  const margin = setting.pricing[role] ?? 0;
+  const margin = setting.pricing[role];
 
-  return Math.ceil(providerPrice + (providerPrice * margin / 100));
+  return Math.ceil(
+    providerPrice +
+      (providerPrice * margin) / 100
+  );
 }
