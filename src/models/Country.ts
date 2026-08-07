@@ -44,5 +44,5 @@ const CountrySchema = new Schema(
   }
 );
 
-export default (models.Country as Model<any>) ||
-    model("Country", CountrySchema);
+export default (models.Country as any) ||
+  model("Country", CountrySchema);
