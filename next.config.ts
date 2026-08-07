@@ -7,10 +7,6 @@ const nextConfig: NextConfig = {
 
   compress: true,
 
-  experimental: {
-    typedRoutes: true
-  },
-
   images: {
     remotePatterns: [
       {
