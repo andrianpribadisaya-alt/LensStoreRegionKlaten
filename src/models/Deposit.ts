@@ -41,4 +41,4 @@ const DepositSchema = new Schema(
   }
 );
 
-export default (models.Deposit as Model<any>) || model("Deposit", DepositSchema);
+export default (models.Deposit as any) || model("Deposit", DepositSchema);
