@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Model } from "mongoose";
 
 const ServiceSchema = new Schema(
   {
@@ -34,5 +34,5 @@ const ServiceSchema = new Schema(
   }
 );
 
-export default models.Service ||
-  model("Service", ServiceSchema);
+export default (models.Service as Model<any>) ||
+    model("Service", ServiceSchema);
