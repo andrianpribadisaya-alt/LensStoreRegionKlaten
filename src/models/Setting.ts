@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Model } from "mongoose";
 
 const SettingSchema = new Schema(
 {
@@ -134,4 +134,4 @@ const SettingSchema = new Schema(
     timestamps:true
 });
 
-export default models.Setting || model("Setting", SettingSchema);
+export default (models.Setting as Model<any>) || model("Setting", SettingSchema);
