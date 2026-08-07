@@ -134,4 +134,4 @@ const SettingSchema = new Schema(
     timestamps:true
 });
 
-export default (models.Setting as Model<any>) || model("Setting", SettingSchema);
+export default (models.Setting as any) || model("Setting", SettingSchema);
