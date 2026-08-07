@@ -34,5 +34,5 @@ const ServiceSchema = new Schema(
   }
 );
 
-export default (models.Service as Model<any>) ||
-    model("Service", ServiceSchema);
+export default (models.Service as any) ||
+  model("Service", ServiceSchema);
