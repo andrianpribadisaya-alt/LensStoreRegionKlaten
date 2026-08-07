@@ -3,131 +3,370 @@
 import { useState } from "react";
 
 import { saveProvider } from "@/app/admin/provider/actions";
-
 import { testConnection } from "@/app/admin/provider/test-action";
+import { syncServices } from "@/app/admin/provider/sync-services";
+import { syncCountries } from "@/app/admin/provider/sync-countries";
 
-export default function SMSCodeForm({provider}:any){
-
-const [form,setForm]=useState(provider);
-
-async function save(){
-
-await saveProvider(form);
-
-alert("Berhasil disimpan");
-
+interface ProviderSettings {
+  apiKey: string;
+  baseUrl: string;
+  syncInterval: number;
+  autoSync: boolean;
+  active: boolean;
 }
 
-async function test(){
-
-const res=await testConnection();
-
-alert(res.message);
-
+interface SMSCodeFormProps {
+  provider: ProviderSettings;
 }
 
-return(
+export default function SMSCodeForm({
+  provider,
+}: SMSCodeFormProps) {
+  const [form, setForm] = useState<ProviderSettings>({
+    apiKey: provider?.apiKey || "",
+    baseUrl: provider?.baseUrl || "https://smscode.gg/api",
+    syncInterval: provider?.syncInterval || 10,
+    autoSync: provider?.autoSync ?? true,
+    active: provider?.active ?? true,
+  });
 
-<div className="space-y-5">
+  const [loading, setLoading] = useState(false);
+  const [testing, setTesting] = useState(false);
+  const [syncingServices, setSyncingServices] = useState(false);
+  const [syncingCountries, setSyncingCountries] = useState(false);
 
-<input
+  const [message, setMessage] = useState("");
 
-className="input"
+  async function save() {
+    try {
+      setLoading(true);
+      setMessage("");
 
-placeholder="API Key"
+      await saveProvider(form);
 
-value={form.apiKey}
+      setMessage("Pengaturan SMSCode berhasil disimpan.");
+    } catch (error) {
+      console.error(error);
 
-onChange={e=>setForm({...form,apiKey:e.target.value})}
+      setMessage(
+        "Gagal menyimpan pengaturan SMSCode."
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
 
-/>
+  async function test() {
+    try {
+      setTesting(true);
+      setMessage("");
 
-<input
+      const res = await testConnection();
 
-className="input"
+      setMessage(
+        res?.message ||
+          "Koneksi SMSCode berhasil."
+      );
+    } catch (error) {
+      console.error(error);
 
-placeholder="Base URL"
+      setMessage(
+        "Gagal melakukan test koneksi SMSCode."
+      );
+    } finally {
+      setTesting(false);
+    }
+  }
 
-value={form.baseUrl}
+  async function handleSyncServices() {
+    try {
+      setSyncingServices(true);
+      setMessage("");
 
-onChange={e=>setForm({...form,baseUrl:e.target.value})}
+      const res = await syncServices();
 
-/>
+      setMessage(
+        `Berhasil sync ${res.total} service.`
+      );
+    } catch (error) {
+      console.error(error);
 
-<input
+      setMessage(
+        "Gagal melakukan sinkronisasi service."
+      );
+    } finally {
+      setSyncingServices(false);
+    }
+  }
 
-type="number"
+  async function handleSyncCountries() {
+    try {
+      setSyncingCountries(true);
+      setMessage("");
 
-className="input"
+      const res = await syncCountries();
 
-value={form.syncInterval}
+      setMessage(
+        `Berhasil sync ${res.total} negara.`
+      );
+    } catch (error) {
+      console.error(error);
 
-onChange={e=>setForm({...form,syncInterval:Number(e.target.value)})}
+      setMessage(
+        "Gagal melakukan sinkronisasi negara."
+      );
+    } finally {
+      setSyncingCountries(false);
+    }
+  }
 
-/>
+  return (
+    <div className="max-w-3xl space-y-6">
 
-<label>
+      {/* Header */}
+      <div>
+        <h1 className="text-2xl font-bold text-white">
+          SMSCode
+        </h1>
 
-<input
+        <p className="mt-1 text-sm text-slate-400">
+          Kelola koneksi dan sinkronisasi provider SMSCode.
+        </p>
+      </div>
 
-type="checkbox"
+      {/* Settings Card */}
+      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
 
-checked={form.autoSync}
+        <div className="space-y-5">
 
-onChange={e=>setForm({...form,autoSync:e.target.checked})}
+          {/* API Key */}
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-300">
+              API Key
+            </label>
 
-/>
+            <input
+              type="password"
+              value={form.apiKey}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  apiKey: e.target.value,
+                })
+              }
+              placeholder="Masukkan API Key SMSCode"
+              className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-blue-500"
+            />
+          </div>
 
-Auto Sync
+          {/* Base URL */}
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-300">
+              Base URL
+            </label>
 
-</label>
+            <input
+              type="text"
+              value={form.baseUrl}
+              onChange={(e) =>
+                setForm({
+                  ...form,
+                  baseUrl: e.target.value,
+                })
+              }
+              placeholder="https://smscode.gg/api"
+              className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none transition focus:border-blue-500"
+            />
+          </div>
 
-<label>
+          {/* Sync Interval */}
+          <div>
+            <label className="mb-2 block text-sm font-medium text-slate-300">
+              Sync Interval
+            </label>
 
-<input
+            <div className="flex items-center gap-3">
 
-type="checkbox"
+              <input
+                type="number"
+                min={1}
+                value={form.syncInterval}
+                onChange={(e) =>
+                  setForm({
+                    ...form,
+                    syncInterval: Math.max(
+                      1,
+                      Number(e.target.value) || 1
+                    ),
+                  })
+                }
+                className="w-full rounded-xl border border-slate-700 bg-slate-950 px-4 py-3 text-white outline-none focus:border-blue-500"
+              />
 
-checked={form.active}
+              <span className="text-sm text-slate-400">
+                menit
+              </span>
 
-onChange={e=>setForm({...form,active:e.target.checked})}
+            </div>
+          </div>
 
-/>
+          {/* Auto Sync */}
+          <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-4">
 
-Aktif
+            <div>
+              <p className="font-medium text-white">
+                Auto Sync
+              </p>
 
-</label>
+              <p className="text-sm text-slate-400">
+                Sinkronisasi data secara otomatis.
+              </p>
+            </div>
 
-<div className="flex gap-3">
+            <button
+              type="button"
+              onClick={() =>
+                setForm({
+                  ...form,
+                  autoSync: !form.autoSync,
+                })
+              }
+              className={`relative h-6 w-11 rounded-full transition ${
+                form.autoSync
+                  ? "bg-blue-600"
+                  : "bg-slate-700"
+              }`}
+            >
+              <span
+                className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${
+                  form.autoSync
+                    ? "left-6"
+                    : "left-1"
+                }`}
+              />
+            </button>
 
-<button
+          </div>
 
-onClick={test}
+          {/* Active */}
+          <div className="flex items-center justify-between rounded-xl border border-slate-800 bg-slate-950 p-4">
 
-className="bg-green-600 text-white px-5 py-3 rounded-xl"
+            <div>
+              <p className="font-medium text-white">
+                Status Provider
+              </p>
 
->
+              <p className="text-sm text-slate-400">
+                Aktifkan atau nonaktifkan SMSCode.
+              </p>
+            </div>
 
-Test Connection
+            <button
+              type="button"
+              onClick={() =>
+                setForm({
+                  ...form,
+                  active: !form.active,
+                })
+              }
+              className={`relative h-6 w-11 rounded-full transition ${
+                form.active
+                  ? "bg-green-600"
+                  : "bg-slate-700"
+              }`}
+            >
+              <span
+                className={`absolute top-1 h-4 w-4 rounded-full bg-white transition ${
+                  form.active
+                    ? "left-6"
+                    : "left-1"
+                }`}
+              />
+            </button>
 
-</button>
+          </div>
 
-<button
+        </div>
 
-onClick={save}
+      </div>
 
-className="bg-blue-600 text-white px-5 py-3 rounded-xl"
+      {/* Sync */}
+      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
 
->
+        <h2 className="text-lg font-semibold text-white">
+          Sinkronisasi
+        </h2>
 
-Simpan
+        <p className="mt-1 text-sm text-slate-400">
+          Ambil data terbaru dari provider SMSCode dan simpan ke MongoDB.
+        </p>
 
-</button>
+        <div className="mt-5 grid gap-3 sm:grid-cols-2">
 
-</div>
+          <button
+            type="button"
+            onClick={handleSyncServices}
+            disabled={syncingServices}
+            className="rounded-xl bg-purple-600 px-5 py-3 font-medium text-white transition hover:bg-purple-500 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {syncingServices
+              ? "Syncing Services..."
+              : "Sync Services"}
+          </button>
 
-</div>
+          <button
+            type="button"
+            onClick={handleSyncCountries}
+            disabled={syncingCountries}
+            className="rounded-xl bg-orange-600 px-5 py-3 font-medium text-white transition hover:bg-orange-500 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {syncingCountries
+              ? "Syncing Countries..."
+              : "Sync Countries"}
+          </button>
 
-)
+        </div>
 
+      </div>
+
+      {/* Actions */}
+      <div className="rounded-2xl border border-slate-800 bg-slate-900 p-6">
+
+        <div className="flex flex-col gap-3 sm:flex-row">
+
+          <button
+            type="button"
+            onClick={test}
+            disabled={testing}
+            className="flex-1 rounded-xl bg-green-600 px-5 py-3 font-medium text-white transition hover:bg-green-500 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {testing
+              ? "Testing..."
+              : "Test Connection"}
+          </button>
+
+          <button
+            type="button"
+            onClick={save}
+            disabled={loading}
+            className="flex-1 rounded-xl bg-blue-600 px-5 py-3 font-medium text-white transition hover:bg-blue-500 disabled:cursor-not-allowed disabled:opacity-50"
+          >
+            {loading
+              ? "Menyimpan..."
+              : "Simpan Pengaturan"}
+          </button>
+
+        </div>
+
+      </div>
+
+      {/* Message */}
+      {message && (
+        <div className="rounded-xl border border-slate-700 bg-slate-900 px-4 py-3 text-sm text-slate-300">
+          {message}
+        </div>
+      )}
+
+    </div>
+  );
 }
