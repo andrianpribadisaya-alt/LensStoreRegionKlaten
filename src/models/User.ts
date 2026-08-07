@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Model } from "mongoose";
 
 export type UserRole =
   | "admin"
@@ -89,4 +89,4 @@ const UserSchema = new Schema(
   }
 );
 
-export default models.User || model("User", UserSchema);
+export default (models.User as Model<any>) || model("User", UserSchema);
