@@ -33,5 +33,5 @@ const TransactionSchema = new Schema(
   }
 );
 
-export default (models.Transaction as Model<any>) ||
-  model("Transaction", TransactionSchema);
+export default (models.Transaction as any) ||
+model("Transaction", TransactionSchema);
