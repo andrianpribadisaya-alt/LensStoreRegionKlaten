@@ -4,15 +4,27 @@ const ServiceSchema = new Schema(
   {
     serviceId: {
       type: String,
+      required: true,
       unique: true,
       index: true,
     },
 
-    name: String,
+    code: {
+      type: String,
+      default: "",
+    },
 
-    category: String,
+    name: {
+      type: String,
+      required: true,
+    },
 
     active: {
+      type: Boolean,
+      default: true,
+    },
+
+    providerActive: {
       type: Boolean,
       default: true,
     },
@@ -22,4 +34,5 @@ const ServiceSchema = new Schema(
   }
 );
 
-export default models.Service || model("Service", ServiceSchema);
+export default models.Service ||
+  model("Service", ServiceSchema);
