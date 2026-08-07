@@ -57,10 +57,10 @@ const SettingSchema = new Schema(
             default:""
         },
 
-        baseUrl:{
-            type:String,
-            default:"https://smscode.gg/api"
-        },
+        baseUrl: {
+  type: String,
+  default: "https://api.smscode.gg/v1"
+},
 
         autoSync:{
             type:Boolean,
