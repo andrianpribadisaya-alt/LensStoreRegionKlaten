@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Model } from "mongoose";
 
 const CountrySchema = new Schema(
   {
@@ -44,5 +44,5 @@ const CountrySchema = new Schema(
   }
 );
 
-export default models.Country ||
-  model("Country", CountrySchema);
+export default (models.Country as Model<any>) ||
+    model("Country", CountrySchema);
