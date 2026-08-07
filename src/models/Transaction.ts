@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Model } from "mongoose";
 
 const TransactionSchema = new Schema(
   {
@@ -33,5 +33,5 @@ const TransactionSchema = new Schema(
   }
 );
 
-export default models.Transaction ||
-model("Transaction", TransactionSchema);
+export default (models.Transaction as Model<any>) ||
+  model("Transaction", TransactionSchema);
