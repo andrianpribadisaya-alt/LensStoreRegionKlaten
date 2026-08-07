@@ -1,13 +1,35 @@
-export default function DashboardPage() {
-  return (
-    <div>
-      <h2 className="text-3xl font-bold text-white">
-        Selamat Datang di LensOtp 👋
-      </h2>
+import BalanceCard from "@/components/dashboard/BalanceCard"
+import StatsCard from "@/components/dashboard/StatsCard"
 
-      <p className="mt-2 text-slate-400">
-        Dashboard masih dalam tahap pengembangan.
-      </p>
-    </div>
-  );
+export default function Dashboard() {
+
+    return (
+
+        <div className="space-y-6">
+
+            <BalanceCard balance={250000} />
+
+            <div className="grid gap-4 md:grid-cols-3">
+
+                <StatsCard
+                    title="Total Deposit"
+                    value="Rp2.500.000"
+                />
+
+                <StatsCard
+                    title="Total Order"
+                    value={327}
+                />
+
+                <StatsCard
+                    title="Membership"
+                    value="Bronze"
+                />
+
+            </div>
+
+        </div>
+
+    )
+
 }
