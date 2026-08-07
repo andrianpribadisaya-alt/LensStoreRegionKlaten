@@ -1,21 +1,12 @@
 import NextAuth from "next-auth";
-import Google from "next-auth/providers/google";
 
+import { authConfig } from "@/auth.config";
 import { connectDB } from "@/lib/db";
 import User from "@/models/User";
 import { randomString } from "@/lib/utils";
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  providers: [
-    Google({
-      clientId: process.env.AUTH_GOOGLE_ID!,
-      clientSecret: process.env.AUTH_GOOGLE_SECRET!,
-    }),
-  ],
-
-  session: {
-    strategy: "jwt",
-  },
+  ...authConfig,
 
   callbacks: {
     async signIn({ profile }) {
@@ -66,9 +57,5 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
       return session;
     },
-  },
-
-  pages: {
-    signIn: "/login",
   },
 });
