@@ -4,15 +4,37 @@ const CountrySchema = new Schema(
   {
     countryId: {
       type: String,
+      required: true,
       unique: true,
       index: true,
     },
 
-    name: String,
+    code: {
+      type: String,
+      default: "",
+    },
 
-    code: String,
+    name: {
+      type: String,
+      required: true,
+    },
+
+    dialCode: {
+      type: String,
+      default: "",
+    },
+
+    emoji: {
+      type: String,
+      default: "",
+    },
 
     active: {
+      type: Boolean,
+      default: true,
+    },
+
+    providerActive: {
       type: Boolean,
       default: true,
     },
@@ -22,4 +44,5 @@ const CountrySchema = new Schema(
   }
 );
 
-export default models.Country || model("Country", CountrySchema);
+export default models.Country ||
+  model("Country", CountrySchema);
