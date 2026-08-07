@@ -1,4 +1,4 @@
-import { Schema, model, models } from "mongoose";
+import { Schema, model, models, Model } from "mongoose";
 
 const DepositSchema = new Schema(
   {
@@ -41,4 +41,4 @@ const DepositSchema = new Schema(
   }
 );
 
-export default models.Deposit || model("Deposit", DepositSchema);
+export default (models.Deposit as Model<any>) || model("Deposit", DepositSchema);
