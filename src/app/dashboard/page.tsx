@@ -1,35 +1,42 @@
-import BalanceCard from "@/components/dashboard/BalanceCard"
-import StatsCard from "@/components/dashboard/StatsCard"
+import { auth } from "@/auth";
+import { connectDB } from "@/lib/db";
+import User from "@/models/User";
+import Service from "@/models/Service";
+import Setting from "@/models/Setting";
+import DashboardClient from "@/components/dashboard/DashboardClient";
 
-export default function Dashboard() {
+export default async function DashboardPage() {
+  const session = await auth();
 
-    return (
+  await connectDB();
 
-        <div className="space-y-6">
+  // Ambil data user dari DB (biar fresh)
+  const user = session?.user?.email
+    ? await User.findOne({ email: session.user.email }).lean()
+    : null;
 
-            <BalanceCard balance={250000} />
+  // Ambil semua service/platform yang aktif
+  const services = await Service.find({ active: true })
+    .sort({ name: 1 })
+    .lean();
 
-            <div className="grid gap-4 md:grid-cols-3">
+  // Ambil setting untuk tierLimits
+  let setting = await Setting.findOne().lean();
+  if (!setting) {
+    setting = await Setting.create({});
+  }
 
-                <StatsCard
-                    title="Total Deposit"
-                    value="Rp2.500.000"
-                />
+  const tierLimits = (setting as any)?.tierLimits ?? {
+    silverMin: 100,
+    goldMin: 500,
+    platinumMin: 1000,
+  };
 
-                <StatsCard
-                    title="Total Order"
-                    value={327}
-                />
-
-                <StatsCard
-                    title="Membership"
-                    value="Bronze"
-                />
-
-            </div>
-
-        </div>
-
-    )
-
+  return (
+    <DashboardClient
+      user={user ? JSON.parse(JSON.stringify(user)) : null}
+      services={JSON.parse(JSON.stringify(services))}
+      tierLimits={JSON.parse(JSON.stringify(tierLimits))}
+    />
+  );
 }
