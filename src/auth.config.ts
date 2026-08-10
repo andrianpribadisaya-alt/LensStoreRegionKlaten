@@ -1,11 +1,6 @@
 import type { NextAuthConfig } from "next-auth";
 import Google from "next-auth/providers/google";
 import Credentials from "next-auth/providers/credentials";
-import bcrypt from "bcryptjs";
-
-// PENTING: file ini TIDAK BOLEH import mongoose atau "@/lib/db",
-// karena dipakai di middleware.ts yang jalan di Edge Runtime.
-// Credentials provider boleh ada di sini tapi logika DB harus di auth.ts
 
 export const authConfig = {
   providers: [
@@ -19,9 +14,7 @@ export const authConfig = {
         email: { label: "Email", type: "email" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
-        // Logika verifikasi dihandle di auth.ts callbacks
-        // Kembalikan null dulu, actual check di signIn callback
+      async authorize() {
         return null;
       },
     }),
