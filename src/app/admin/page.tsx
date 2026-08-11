@@ -1,37 +1,27 @@
-import DashboardCard from "@/components/admin/DashboardCard";
+import { connectDB } from "@/lib/db";
+import User from "@/models/User";
+import Setting from "@/models/Setting";
+import AdminOverviewClient from "@/components/admin/AdminOverviewClient";
 
-export default function AdminPage() {
+export default async function AdminPage() {
+  await connectDB();
 
-    return (
+  const [totalUsers, setting] = await Promise.all([
+    User.countDocuments(),
+    Setting.findOne().lean(),
+  ]);
 
-        <div className="space-y-6">
+  const recentUsers = await User.find()
+    .sort({ createdAt: -1 })
+    .limit(5)
+    .select("name email role balance totalOrder createdAt")
+    .lean();
 
-            <div className="grid md:grid-cols-4 gap-5">
-
-                <DashboardCard
-                    title="Total User"
-                    value="0"
-                />
-
-                <DashboardCard
-                    title="Total Deposit"
-                    value="Rp0"
-                />
-
-                <DashboardCard
-                    title="Total Order"
-                    value="0"
-                />
-
-                <DashboardCard
-                    title="Revenue"
-                    value="Rp0"
-                />
-
-            </div>
-
-        </div>
-
-    );
-
+  return (
+    <AdminOverviewClient
+      totalUsers={totalUsers}
+      recentUsers={JSON.parse(JSON.stringify(recentUsers))}
+      setting={JSON.parse(JSON.stringify(setting || {}))}
+    />
+  );
 }
