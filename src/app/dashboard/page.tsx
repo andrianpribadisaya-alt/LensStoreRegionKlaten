@@ -6,31 +6,30 @@ import Setting from "@/models/Setting";
 import DashboardClient from "@/components/dashboard/DashboardClient";
 
 export default async function DashboardPage() {
-  const session = await auth();
+  let user = null;
+  let services = [];
+  let tierLimits = { silverMin: 100, goldMin: 500, platinumMin: 1000 };
 
-  await connectDB();
+  try {
+    const session = await auth();
 
-  // Ambil data user dari DB (biar fresh)
-  const user = session?.user?.email
-    ? await User.findOne({ email: session.user.email }).lean()
-    : null;
+    await connectDB();
 
-  // Ambil semua service/platform yang aktif
-  const services = await Service.find({ active: true })
-    .sort({ name: 1 })
-    .lean();
+    if (session?.user?.email) {
+      user = await User.findOne({ email: session.user.email }).lean();
+    }
 
-  // Ambil setting untuk tierLimits
-  let setting = await Setting.findOne().lean();
-  if (!setting) {
-    setting = await Setting.create({});
+    services = await Service.find({ active: true })
+      .sort({ name: 1 })
+      .lean() as any[];
+
+    let setting = await Setting.findOne().lean() as any;
+    if (setting?.tierLimits) {
+      tierLimits = setting.tierLimits;
+    }
+  } catch (e) {
+    console.error("Dashboard error:", e);
   }
-
-  const tierLimits = (setting as any)?.tierLimits ?? {
-    silverMin: 100,
-    goldMin: 500,
-    platinumMin: 1000,
-  };
 
   return (
     <DashboardClient
