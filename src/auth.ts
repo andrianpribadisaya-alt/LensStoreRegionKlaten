@@ -10,7 +10,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   ...authConfig,
 
   providers: [
-    ...authConfig.providers.filter((p) => p.id !== "credentials"),
+    ...authConfig.providers.filter((p: any) => p.id !== "credentials"),
     Credentials({
       name: "credentials",
       credentials: {
@@ -20,75 +20,88 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.password) return null;
 
-        await connectDB();
+        try {
+          await connectDB();
 
-        const user = await User.findOne({
-          email: (credentials.email as string).toLowerCase(),
-        });
+          const user = await User.findOne({
+            email: (credentials.email as string).toLowerCase(),
+          });
 
-        if (!user || !user.password) return null;
-        if (user.status === "banned") return null;
+          if (!user || !user.password) return null;
+          if (user.status === "banned") return null;
 
-        const isValid = await bcrypt.compare(
-          credentials.password as string,
-          user.password
-        );
+          const isValid = await bcrypt.compare(
+            credentials.password as string,
+            user.password
+          );
 
-        if (!isValid) return null;
+          if (!isValid) return null;
 
-        await User.findByIdAndUpdate(user._id, { lastLogin: new Date() });
+          await User.findByIdAndUpdate(user._id, { lastLogin: new Date() });
 
-        return {
-          id: user._id.toString(),
-          email: user.email,
-          name: user.name,
-          image: user.image,
-        };
+          return {
+            id: user._id.toString(),
+            email: user.email,
+            name: user.name,
+            image: user.image,
+          };
+        } catch (e) {
+          return null;
+        }
       },
     }),
   ],
 
   callbacks: {
-    async signIn({ user, account, profile }) {
+    async signIn({ account, profile }) {
       if (account?.provider === "google") {
-        await connectDB();
-        const email = profile?.email;
-        if (!email) return false;
+        try {
+          await connectDB();
+          const email = profile?.email;
+          if (!email) return false;
 
-        const exists = await User.findOne({ email });
-        if (!exists) {
-          await User.create({
-            googleId: profile?.sub,
-            name: profile?.name,
-            email,
-            image: profile?.picture,
-            role: "bronze",
-            balance: 0,
-            apiKey: randomString(40),
-            status: "active",
-          });
-        } else {
-          await User.findOneAndUpdate({ email }, { lastLogin: new Date() });
+          const exists = await User.findOne({ email });
+          if (!exists) {
+            await User.create({
+              googleId: profile?.sub,
+              name: profile?.name,
+              email,
+              image: (profile as any)?.picture,
+              role: "bronze",
+              balance: 0,
+              apiKey: randomString(40),
+              status: "active",
+            });
+          } else {
+            await User.findOneAndUpdate({ email }, { lastLogin: new Date() });
+          }
+        } catch (e) {
+          console.error("signIn error:", e);
+          return false;
         }
       }
       return true;
     },
 
     async jwt({ token }) {
-      await connectDB();
-      const user = await User.findOne({ email: token.email });
-      if (user) {
-        token.role = user.role;
-        token.balance = user.balance;
-        token.userId = user._id.toString();
-      }
+      try {
+        await connectDB();
+        const user = await User.findOne({ email: token.email });
+        if (user) {
+          token.role = user.role;
+          token.balance = user.balance;
+          token.userId = user._id.toString();
+        }
+      } catch (e) {}
       return token;
     },
 
     async session({ session, token }) {
-      session.user.id = token.userId as string;
-      session.user.role = token.role as string;
-      session.user.balance = token.balance as number;
+      if (session.user) {
+        (session.user as any).id = token.userId;
+        (session.user as any).role = token.role;
+        (session.user as any).balance = token.balance;
+      }
       return session;
     },
   },
