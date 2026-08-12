@@ -5,6 +5,8 @@ import Service from "@/models/Service";
 import Setting from "@/models/Setting";
 import DashboardClient from "@/components/dashboard/DashboardClient";
 
+export const dynamic = "force-dynamic";
+
 export default async function DashboardPage() {
   let user = null;
   let services: any[] = [];
