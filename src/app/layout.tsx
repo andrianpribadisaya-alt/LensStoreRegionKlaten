@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import "./global.css";
+import SessionWrapper from "@/components/layout/SessionWrapper";
 
 export const metadata: Metadata = {
   title: "LensOtp - Premium OTP Marketplace",
@@ -13,7 +14,11 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body>{children}</body>
+      <body>
+        <SessionWrapper>
+          {children}
+        </SessionWrapper>
+      </body>
     </html>
   );
 }
