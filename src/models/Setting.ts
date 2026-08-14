@@ -9,48 +9,53 @@ const SettingSchema = new Schema(
       platinum: { type: Number, default: 2 },
     },
 
-    // Batas order untuk naik tier (diatur dari admin panel)
+    // Margin per tier (dalam persen %)
+    margin: {
+      bronze: { type: Number, default: 10 },
+      silver: { type: Number, default: 8 },
+      gold: { type: Number, default: 5 },
+      platinum: { type: Number, default: 2 },
+    },
+
+    // Batas order untuk naik tier
     tierLimits: {
-      silverMin:  { type: Number, default: 100 },
-      goldMin:    { type: Number, default: 500 },
-      platinumMin:{ type: Number, default: 1000 },
+      silverMin: { type: Number, default: 100 },
+      goldMin: { type: Number, default: 500 },
+      platinumMin: { type: Number, default: 1000 },
     },
 
-    payment: {
-      provider:   { type: String, default: "tokopay" },
+    // Tokopay
+    tokopay: {
       merchantId: { type: String, default: "" },
-      secretKey:  { type: String, default: "" },
-      apiKey:     { type: String, default: "" },
-      expired:    { type: Number, default: 60 },
-      uniqueCode: { type: Number, default: 0 },
-      active:     { type: Boolean, default: true },
+      secretKey: { type: String, default: "" },
+      active: { type: Boolean, default: false },
     },
 
+    // Midtrans
+    midtrans: {
+      serverKey: { type: String, default: "" },
+      clientKey: { type: String, default: "" },
+      isProduction: { type: Boolean, default: false },
+      active: { type: Boolean, default: false },
+    },
+
+    // Provider SMSCode
     provider: {
-      name:         { type: String, default: "smscode" },
-      apiKey:       { type: String, default: "" },
-      baseUrl:      { type: String, default: "https://api.smscode.gg/v1" },
-      autoSync:     { type: Boolean, default: true },
-      syncInterval: { type: Number, default: 10 },
-      active:       { type: Boolean, default: true },
+      name: { type: String, default: "smscode" },
+      apiKey: { type: String, default: "" },
+      baseUrl: { type: String, default: "https://api.smscode.gg/v1" },
+      active: { type: Boolean, default: true },
     },
 
     announcement: {
       enabled: { type: Boolean, default: false },
-      title:   { type: String, default: "" },
+      title: { type: String, default: "" },
       message: { type: String, default: "" },
-      color:   { type: String, default: "blue" },
     },
 
     maintenance: {
       enabled: { type: Boolean, default: false },
       message: { type: String, default: "" },
-    },
-
-    security: {
-      maxLogin:   { type: Number, default: 5 },
-      maxRequest: { type: Number, default: 100 },
-      banMinutes: { type: Number, default: 30 },
     },
   },
   { timestamps: true }
